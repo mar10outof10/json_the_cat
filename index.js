@@ -3,24 +3,16 @@ const readline = require('readline');
 
 process.stdin.setEncoding('utf8');
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
 const breedArg = process.argv.slice(2, 3);
 
-const breedCallback = (error, body, breedInput) => {
+const breedCallback = (error, breedDescription) => {
   if (error) {
     console.error(error);
-    return;
+    return error;
+  } else {
+    console.log(breedDescription);
+    return (breedDescription);
   }
-  const data = JSON.parse(body);
-  if (data.length === 0) {
-    console.log(`Breed, ${breedInput}, not found. Please try again.`);
-    return;
-  }
-  console.log(data);
 };
 
 const fetchBreed = (breed, callback) => {
@@ -28,6 +20,11 @@ const fetchBreed = (breed, callback) => {
 };
 
 fetchBreed(breedArg, breedCallback);
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 
 rl.on('line', (input) => {
   console.log('Attempting to access breed: ', input);
